@@ -35,7 +35,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 
 
-Note:
+## Addtional Note :
 FourSquare api key 
 FOURSQUARE_API_KEY = fsq3Z+6Vd3gIYTuYd02D4dLeXFy7azgQfiY2sQdVCtydB9Y=
 
