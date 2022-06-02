@@ -8,16 +8,19 @@ import { fetchCoffeeStores } from "../../lib/coffee-stores-http";
 
 import styles from "../../styles/coffee-store.module.css";
 
-export const getStaticProps = async (staticProps) => {
-  const params = staticProps.params;
+export const getStaticProps = async (context) => {
+  const params = context.params;
 
-  const fetchCoffeeStoreResult = await fetchCoffeeStores(
-    "https://api.foursquare.com/v3/places/search?ll=-8.818170671067918,115.21708816032742&query=coffee%20shop&limit=6"
-  );
+  // const fetchCoffeeStoreResult = await fetchCoffeeStores(
+  //   "https://api.foursquare.com/v3/places/search?ll=-8.818170671067918,115.21708816032742&query=coffee%20shop&limit=6"
+  // );
+
+  // fetch data from foursquare API
+  const fetchCoffeeStoreResult = await fetchCoffeeStores();
 
   return {
     props: {
-      coffeeStore: fetchCoffeeStoreResult.results.find(
+      coffeeStore: fetchCoffeeStoreResult.find(
         (coffeeStore) => coffeeStore.fsq_id.toString() === params.id
       ),
     },
@@ -25,13 +28,13 @@ export const getStaticProps = async (staticProps) => {
 };
 
 export async function getStaticPaths() {
-  const fetchCoffeeStoreResult = await fetchCoffeeStores(
-    "https://api.foursquare.com/v3/places/search?ll=-8.818170671067918,115.21708816032742&query=coffee%20shop&limit=6"
-  );
+  const fetchCoffeeStoreResult = await fetchCoffeeStores();
+  console.log(fetchCoffeeStoreResult)
 
-  const coffeIdArr = fetchCoffeeStoreResult.results.map((store) => ({
+  const coffeIdArr = fetchCoffeeStoreResult.map((store) => ({
     params: { id: store.fsq_id.toString() },
   }));
+
   return {
     paths: coffeIdArr,
     // fallback: false,
@@ -45,14 +48,13 @@ export async function getStaticPaths() {
 const CoffeeStore = (props) => {
   const router = useRouter();
 
-  console.log(props.coffeeStore);
   const routerId = router.query.id;
 
   if (router.isFallback) {
     return <div className="test">Loading....</div>;
   }
   // const { address, name, neighbourhood, imgUrl } = props.coffeeStore;
-  const { name, location, imgUrl } = props.coffeeStore;
+  const { name, location, imgUrl="" } = props.coffeeStore;
 
   const handleUpvoteButton = () => {
     console.log("test");
@@ -79,7 +81,7 @@ const CoffeeStore = (props) => {
       />
     );
 
-    return props.image ? imageContent : defaultImage;
+    return imgUrl ? imgContent : defaultImage;
   };
 
   return (

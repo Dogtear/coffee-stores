@@ -25,11 +25,11 @@ export async function getStaticProps(context) {
   //   .then((data) => console.log(data))
   //   .catch((err) => console.log(err));
 
-  const storeData = await fetchCoffeeStores(
-    "https://api.foursquare.com/v3/places/search?ll=-8.818170671067918,115.21708816032742&query=coffee%20shop&limit=6"
-  );
+  const storeData = await fetchCoffeeStores();
+  // console.log(storeData)
+
   return {
-    props: { CoffeeData: storeData.results }, // will be passed to the page component as props
+    props: { CoffeeData: storeData }, // will be passed to the page component as props
   };
 }
 
